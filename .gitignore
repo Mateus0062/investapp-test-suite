@@ -1,0 +1,10 @@
+# Arquivos que contem senhas e credenciais sensiveis
+.env
+.vscode/launch.json
+
+# Artefatos gerados pelo Python / Pytest / cobertura
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
