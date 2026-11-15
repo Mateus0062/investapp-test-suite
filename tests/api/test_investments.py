@@ -3,6 +3,9 @@
 Responsavel: Integrantes 3, 4 e 7 - POST/GET/DELETE /api/investments e DDT via CSV.
 """
 
+import csv
+import os
+
 import pytest
 import requests
 
@@ -92,3 +95,48 @@ def test_delete_investment(base_url, auth_headers):
         # Dependendo da regra da API, deletar algo inexistente pode retornar 404
         assert response.status_code in [404, 400], f"Esperado status de erro para ID inexistente, recebido: {response.status_code}"
 
+
+# Integrante 7 - Júlia Suriani - DDT via CSV
+# (restaurado do commit d54eeaa; o trecho havia sido removido no merge 77e3254)
+def carregar_dados_csv():
+    """Lê os dados do CSV de investimentos para testes parametrizados (DDT)."""
+    caminho_csv = os.path.join(os.path.dirname(__file__), "..", "data", "dados_investimentos.csv")
+    dados = []
+    if os.path.exists(caminho_csv):
+        with open(caminho_csv, mode="r", encoding="utf-8") as arquivo:
+            leitor = csv.DictReader(arquivo)
+            for linha in leitor:
+                dados.append((
+                    linha["asset_name"],
+                    float(linha["amount"]),
+                    float(linha["purchase_price"]),
+                    int(linha["days_invested"]),
+                    int(linha["planned_days"]),
+                    int(linha["status_esperado"])
+                ))
+    return dados
+
+
+@pytest.mark.parametrize(
+    "asset_name, amount, purchase_price, days_invested, planned_days, status_esperado",
+    carregar_dados_csv()
+)
+def test_create_investment_ddt(
+    base_url, auth_headers, asset_name, amount, purchase_price, days_invested, planned_days, status_esperado
+):
+    """
+    Teste Orientado a Dados (DDT) para criação de investimentos via CSV.
+    Responsável: Integrante 7.
+    """
+    payload = {
+        "asset_name": asset_name,
+        "amount": amount,
+        "purchase_price": purchase_price,
+        "days_invested": days_invested,
+        "planned_days": planned_days
+    }
+
+    response = requests.post(f"{base_url}/api/investments", json=payload, headers=auth_headers)
+    assert response.status_code == status_esperado, (
+        f"Esperado status {status_esperado}, obtido {response.status_code}. Resposta: {response.text}"
+    )
