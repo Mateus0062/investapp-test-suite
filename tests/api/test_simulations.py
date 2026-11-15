@@ -2,13 +2,13 @@
 
 Responsavel: Integrantes 5 e 6 - POST /api/simulate/yield-monthly e /api/simulate/tax-withdrawal.
 """
-# Integrante 6 - Júlia Suriani - GET/DELETE /api/investments POST /api/simulate/tax-withdrawal
 
 import pytest
 import requests
 
 
-# Integrante 5 - POST /api/simulate/yield-monthly
+# Integrante 5 - Gustavo Morais - POST /api/simulate/yield-monthly
+
 @pytest.mark.parametrize("months", [6, 12, 24])
 def test_simulate_yield_monthly(base_url, auth_headers, months):
     """
@@ -81,6 +81,7 @@ def test_simulate_yield_monthly_sem_token(base_url):
     assert response.json().get("detail") == "Not authenticated"
 
 
+# Integrante 6 - Júlia Suriani - GET/DELETE /api/investments POST /api/simulate/tax-withdrawal
 def test_simulate_tax_withdrawal(base_url, auth_headers):
     """
     Testa a simulação de resgate com otimização fiscal (POST /api/simulate/tax-withdrawal).
