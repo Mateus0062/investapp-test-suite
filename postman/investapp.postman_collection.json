@@ -1,0 +1,38 @@
+{
+  "info": {
+    "name": "InvestApp - Newman (extra secao 9) - Luiz Felipe Silva Araujo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://5bm1nctd1f.execute-api.us-east-1.amazonaws.com" }
+  ],
+  "item": [
+    {
+      "name": "1. Listar ativos (200)",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/assets" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('Status 200', () => pm.response.to.have.status(200));",
+        "pm.test('Retorna uma lista', () => pm.expect(pm.response.json()).to.be.an('array'));"
+      ]}}]
+    },
+    {
+      "name": "2. Login com usuario invalido (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"username\": \"usuario_invalido\", \"password\": \"senha_errada\"}" },
+        "url": "{{baseUrl}}/api/login"
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('Status 400', () => pm.response.to.have.status(400));"
+      ]}}]
+    },
+    {
+      "name": "3. Investimentos sem token (401)",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/investments" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('Status 401', () => pm.response.to.have.status(401));"
+      ]}}]
+    }
+  ]
+}
