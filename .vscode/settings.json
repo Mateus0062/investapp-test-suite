@@ -9,5 +9,6 @@
     "python.envFile": "${workspaceFolder}/.env",
     "flake8.args": [
         "--config=.flake8"
-    ]
+    ],
+    "python.terminal.useEnvFile": true
 }
